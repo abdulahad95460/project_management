@@ -30,4 +30,29 @@ const  registerUser =  async (req, res) => {
     });
 };
 
-                  module.exports = { registerUser };
+
+  const loginUser = async (req, res) => {
+    
+    const { email, password } = req.body;
+
+       const user = await User.findOne({ email });
+       if (!user) {
+    return res.status(400).json({
+        message: "Invalid email or password"
+    });
+}
+const isPasswordCorrect = await bcrypt.compare(
+    password,
+    user.password
+);
+
+
+        if (!isPasswordCorrect)    {
+    return res.status(400).json({
+        message: "Invalid email or password"
+        });
+}
+
+};
+
+                  module.exports = { registerUser , loginUser };
