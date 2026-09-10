@@ -1,16 +1,21 @@
 const Project = require("../models/Project");
 
 const createProject = async (req, res) => {
-    try {
-             const { name, description } = req.body;
+      try {
+               const { name, description } = req.body;
 
+          if (!name || !description) {
+            return res.status(400).json({
+                message: "Name and description are required"
+       });
+  }
         const project = await Project.create({
-                name,
-                 description,
-               owner: req.userId
-        });
+            name,
+            description,
+            owner: req.userId
+  });
 
- res.status(201).json({
+        res.status(201).json({
             message: "Project created successfully",
             project
         });
@@ -22,23 +27,32 @@ const createProject = async (req, res) => {
     }
 };
 
-           const getProjects = async (req, res) => {
+     const getProjects = async (req, res) => {
     try {
-        const projects = await Project.find({ owner: req.userId });
+        const projects = await Project.find({
+            $or: [
+                { owner: req.userId },
+                { members: req.userId }
+            ]
+        })
+            .populate("owner", "name email")
+            .populate("members", "name email")
+            .sort({ createdAt: -1 });
+
         res.status(200).json({ projects });
     } catch (error) {
-  res.status(500).json({
+        res.status(500).json({
             message: "Server error while fetching projects",
             error: error.message
         });
     }
 };
 
-const getProject = async (req, res) => {
+         const getProject = async (req, res) => {
     try {
-          const project = await Project.findOne({ _id: req.params.id, owner: req.userId });
+        const project = await Project.findOne({ _id: req.params.id, owner: req.userId });
 
- if (!project) {
+        if (!project) {
             return res.status(404).json({ message: "Project not found" });
         }
 
@@ -52,18 +66,19 @@ const getProject = async (req, res) => {
 };
 
 const updateProject = async (req, res) => {
-    try {
-        const project = await Project.findOne({ _id: req.params.id, owner: req.userId });
+
+try {
+     const project = await Project.findOne({ _id: req.params.id, owner: req.userId });
 
         if (!project) {
             return res.status(404).json({ message: "Project not found" });
         }
 
-        const { name, description, status } = req.body;
+const { name, description, status } = req.body;
 
 if (name) project.name = name;
-             if (description) project.description = description;
-        if (status) project.status = status;
+   if (description) project.description = description;
+         if (status) project.status = status;
 
         await project.save();
 
@@ -83,9 +98,9 @@ const deleteProject = async (req, res) => {
     try {
         const project = await Project.findOneAndDelete({ _id: req.params.id, owner: req.userId });
 
-        if (!project) {
+ if (!project) {
             return res.status(404).json({ message: "Project not found" });
-        }
+}
 
         res.status(200).json({ message: "Project deleted successfully" });
     } catch (error) {
