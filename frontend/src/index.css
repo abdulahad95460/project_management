@@ -1,0 +1,54 @@
+*, *::before, *::after {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+    background: #0f0f1a;
+    color: #fff;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+#root {
+    width: 100%;
+    min-height: 100vh;
+}
+
+a {
+    text-decoration: none;
+    color: inherit;
+}
+
+button {
+    font-family: inherit;
+}
+
+input, select, textarea {
+    font-family: inherit;
+    outline: none;
+}
+
+input::placeholder {
+    color: #666;
+}
+
+select option {
+    background: #1e1e2e;
+    color: #fff;
+}
+
+::-webkit-scrollbar {
+    width: 6px;
+}
+
+::-webkit-scrollbar-track {
+    background: #1e1e2e;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #7c6af7;
+    border-radius: 3px;
+}
