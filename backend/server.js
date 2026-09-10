@@ -5,9 +5,14 @@ const authRoutes = require("./routes/authRoutes");
 
    const authMiddleware = require("./middleware/authMiddleware");
 
-const app = express();
+   const projectRoutes = require("./routes/ProjectRoutes");
+
+  const app = express();
      app.use(express.json());
+
 app.use("/api/auth", authRoutes);
+
+app.use("/api/projects", projectRoutes);
 
       app.get("/api/test", authMiddleware, (req, res) => {
     res.json({
@@ -20,7 +25,7 @@ app.get("/", (req, res) => {
 });
 
 connectDB()
-const PORT = process.env.PORT;
+const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
     console.log(`ProjectFlow server is running on port ${PORT}`);
 });
