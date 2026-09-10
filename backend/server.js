@@ -1,5 +1,6 @@
 require("dotenv").config();
 const express = require("express");
+const cors = require("cors");
 const connectDB = require("./config/db");
 const authRoutes = require("./routes/authRoutes");
 
@@ -10,14 +11,17 @@ const authRoutes = require("./routes/authRoutes");
 
 
    const taskRoutes = require("./routes/taskRoutes");
+const memberRoutes = require("./routes/memberRoutes");
 
   const app = express();
-     app.use(express.json());
+app.use(cors({ origin: "http://localhost:5173", credentials: true }));
+app.use(express.json());
 
 app.use("/api/auth", authRoutes);
 
 app.use("/api/projects", projectRoutes);
 app.use("/api/projects/:projectId/tasks", taskRoutes);
+app.use("/api/projects/:projectId/members", memberRoutes);
 
       app.get("/api/test", authMiddleware, (req, res) => {
     res.json({
