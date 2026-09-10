@@ -6,7 +6,10 @@ const authRoutes = require("./routes/authRoutes");
    const authMiddleware = require("./middleware/authMiddleware");
 
    const projectRoutes = require("./routes/ProjectRoutes");
-const taskRoutes = require("./routes/taskRoutes");
+
+
+
+   const taskRoutes = require("./routes/taskRoutes");
 
   const app = express();
      app.use(express.json());
